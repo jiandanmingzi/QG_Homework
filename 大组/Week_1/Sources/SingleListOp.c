@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "SingleLinkedList.h" 
+#include "SingleList.h"
 int main()
 {
     struct SingleListOp *Operater[10];

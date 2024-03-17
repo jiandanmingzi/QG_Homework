@@ -1,17 +1,18 @@
-#pragma once
+#ifndef DoubleList_H
+#define DoubleList_H
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-struct DoubleList
-{
-};
+struct DoubleList;
 
-struct DoubleList *CreatHead(char List_Name[]); // ´´½¨ĞÂÁ´±í
+struct DoubleList *CreatHead(char List_Name[]); // åˆ›å»ºæ–°é“¾è¡¨
 
-struct DoubleList *AddNode(char Data[], struct DoubleList *last); // Ìí¼Ó½Úµã
+struct DoubleList *AddNode(char Data[], struct DoubleList *last); // æ·»åŠ èŠ‚ç‚¹
 
-int DeletNode(struct DoubleList *Node); // É¾³ı½Úµã
+int DeletNode(struct DoubleList *Node); // åˆ é™¤èŠ‚ç‚¹
 
-int ChangeData(char *Data, struct DoubleList *Node); // ĞŞ¸Ä½ÚµãÊı¾İ
+int ChangeData(char *Data, struct DoubleList *Node); // ä¿®æ”¹èŠ‚ç‚¹æ•°æ®
 
-void swap(struct DoubleList *First, struct DoubleList *Second); // ½»»»½ÚµãÎ»ÖÃ
+void swap(struct DoubleList *First, struct DoubleList *Second); // äº¤æ¢èŠ‚ç‚¹ä½ç½®
+
+#endif

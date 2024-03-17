@@ -1,38 +1,40 @@
-#include "DoubleList.c"
-struct DoubleListOp
-{
-};
+#ifndef DoubeLinkedList_H
+#define DoubeLinkedList_H
+#include "DoubleList.h"
+struct DoubleListOp;
 
-int GetSize(struct DoubleListOp *target); // »ñÈ¡Á´±í³¤¶È
+int GetSize(struct DoubleListOp *target); // è·å–é“¾è¡¨é•¿åº¦
 
-struct DoubleList *GetNode(struct DoubleListOp *target, int cnt); // »ñÈ¡ÌØ¶¨Î»ÖÃµÄ½Úµã
+struct DoubleList *GetNode(struct DoubleListOp *target, int cnt); // è·å–ç‰¹å®šä½ç½®çš„èŠ‚ç‚¹
 
-struct DoubleList *AddFromEnd(struct DoubleListOp *target, char *Data); // ´ÓÎ²Ìí¼Ó
+struct DoubleList *AddFromEnd(struct DoubleListOp *target, char *Data); // ä»å°¾æ·»åŠ 
 
-struct DoubleList *AddFromHead(struct DoubleListOp *target, char *Data); // ´ÓÍ·Ìí¼Ó
+struct DoubleList *AddFromHead(struct DoubleListOp *target, char *Data); // ä»å¤´æ·»åŠ 
 
-int DelFromEnd(struct DoubleListOp *target); // É¾³ıÎ²½Úµã
+int DelFromEnd(struct DoubleListOp *target); // åˆ é™¤å°¾èŠ‚ç‚¹
 
-int Linked(struct DoubleListOp *target); // ½«Á´±íÍ·Î²ÏàÁ¬
+int Linked(struct DoubleListOp *target); // å°†é“¾è¡¨å¤´å°¾ç›¸è¿
 
-int *SearchLocate(struct DoubleListOp *target, char *Data); // ¸ù¾İÊı¾İËÑË÷½ÚµãËùÔÚÎ»ÖÃ
+int *SearchLocate(struct DoubleListOp *target, char *Data); // æ ¹æ®æ•°æ®æœç´¢èŠ‚ç‚¹æ‰€åœ¨ä½ç½®
 
-struct DoubleListOp *CreatDoubleList(char *Name); // ´´½¨ĞÂÁ´±í
+struct DoubleListOp *CreatDoubleList(char *Name); // åˆ›å»ºæ–°é“¾è¡¨
 
-struct DoubleList *InsertNode(struct DoubleListOp *target, int cnt, char *Data); // ÈÎÒâÎ»ÖÃ²åÈë½Úµã
+struct DoubleList *InsertNode(struct DoubleListOp *target, int cnt, char *Data); // ä»»æ„ä½ç½®æ’å…¥èŠ‚ç‚¹
 
-int DelNode(int locate, struct DoubleListOp *target); // É¾³ıÖ¸¶¨Î»ÖÃµÄ½Úµã
+int DelNode(int locate, struct DoubleListOp *target); // åˆ é™¤æŒ‡å®šä½ç½®çš„èŠ‚ç‚¹
 
-int ChangeNode(int cnt, struct DoubleListOp *target, char *Data); // ¸ü¸ÄÖ¸¶¨½ÚµãÊı¾İ
+int ChangeNode(int cnt, struct DoubleListOp *target, char *Data); // æ›´æ”¹æŒ‡å®šèŠ‚ç‚¹æ•°æ®
 
-int CleanList(struct DoubleListOp *target); // Çå¿ÕÁ´±í
+int CleanList(struct DoubleListOp *target); // æ¸…ç©ºé“¾è¡¨
 
-int isCircle(struct DoubleListOp *target); // ÅĞ¶ÏÊÇ·ñ³É»·
+int isCircle(struct DoubleListOp *target); // åˆ¤æ–­æ˜¯å¦æˆç¯
 
-int ParitySwapping(struct DoubleListOp *target); // ÆæÅ¼¶Ô»»
+int ParitySwapping(struct DoubleListOp *target); // å¥‡å¶å¯¹æ¢
 
-struct DoubleList *GetMiddle(struct DoubleListOp *target); // È¡ÖĞ¼äÖµ
+struct DoubleList *GetMiddle(struct DoubleListOp *target); // å–ä¸­é—´å€¼
 
-int Reversal(struct DoubleListOp *target); // ·Çµİ¹é·´×ªÁ´±í
+int Reversal(struct DoubleListOp *target); // éé€’å½’åè½¬é“¾è¡¨
 
-int recursionReveral(struct DoubleListOp *target, int cnt, int Size); // µİ¹é·´×ªÁ´±í
+int recursionReveral(struct DoubleListOp *target, int cnt, int Size); // é€’å½’åè½¬é“¾è¡¨
+
+#endif

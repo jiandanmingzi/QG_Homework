@@ -1,4 +1,7 @@
-#include "DoubleList.c"
+#include "DoubleLinkedList.h"
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 struct DoubleListOp
 {
     int size;                // 记录节点个数

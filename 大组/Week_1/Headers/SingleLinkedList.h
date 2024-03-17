@@ -3,32 +3,34 @@
 #include "SingleList.h"
 struct SingleListOp;
 
-int GetSize(struct SingleListOp *target); // »ñÈ¡Á´±í³¤¶È
+int GetSize(struct SingleListOp *target); // è·å–é“¾è¡¨é•¿åº¦
 
-struct SingleList *GetNode(struct SingleListOp *target, int cnt); // »ñÈ¡ÌØ¶¨Î»ÖÃµÄ½Úµã
+struct SingleList *GetNode(struct SingleListOp *target, int cnt); // è·å–ç‰¹å®šä½ç½®çš„èŠ‚ç‚¹
 
-struct SingleList *AddFromEnd(struct SingleListOp *target, char *Data); // ´ÓÎ²Ìí¼Ó
+struct SingleList *AddFromEnd(struct SingleListOp *target, char *Data); // ä»å°¾æ·»åŠ 
 
-struct SingleList *AddFromHead(struct SingleListOp *target, char *Data); // ´ÓÍ·Ìí¼Ó
+struct SingleList *AddFromHead(struct SingleListOp *target, char *Data); // ä»å¤´æ·»åŠ 
 
-int DelFromEnd(struct SingleListOp *target); // É¾³ıÎ²½Úµã
+int DelFromEnd(struct SingleListOp *target); // åˆ é™¤å°¾èŠ‚ç‚¹
 
-int Linked(struct SingleListOp *target, int locate); // ½«Î²½ÚµãÓëÖ¸¶¨½ÚµãÁ¬½Ó
+int Linked(struct SingleListOp *target, int locate); // å°†å°¾èŠ‚ç‚¹ä¸æŒ‡å®šèŠ‚ç‚¹è¿æ¥
 
-int *SearchLocate(struct SingleListOp *target, char *Data); // ¸ù¾İÊı¾İËÑË÷½ÚµãËùÔÚÎ»ÖÃ
+int *SearchLocate(struct SingleListOp *target, char *Data); // æ ¹æ®æ•°æ®æœç´¢èŠ‚ç‚¹æ‰€åœ¨ä½ç½®
 
-struct SingleListOp *CreatSingleList(char *Name); // ´´½¨ĞÂÁ´±í
+struct SingleListOp *CreatSingleList(char *Name); // åˆ›å»ºæ–°é“¾è¡¨
 
-struct SingleList *InsertNode(struct SingleListOp *target, int cnt, char *Data); // ÈÎÒâÎ»ÖÃ²åÈë½Úµã
+struct SingleList *InsertNode(struct SingleListOp *target, int cnt, char *Data); // ä»»æ„ä½ç½®æ’å…¥èŠ‚ç‚¹
 
-int DelNode(int locate, struct SingleListOp *target); // É¾³ıÖ¸¶¨Î»ÖÃµÄ½Úµã
+int DelNode(int locate, struct SingleListOp *target); // åˆ é™¤æŒ‡å®šä½ç½®çš„èŠ‚ç‚¹
 
-int ChangeNode(int cnt, struct SingleListOp *target, char *Data); // ¸ü¸ÄÖ¸¶¨½ÚµãÊı¾İ
+int ChangeNode(int cnt, struct SingleListOp *target, char *Data); // æ›´æ”¹æŒ‡å®šèŠ‚ç‚¹æ•°æ®
 
-int CleanList(struct SingleListOp *target); // Çå¿ÕÁ´±í
+int CleanList(struct SingleListOp *target); // æ¸…ç©ºé“¾è¡¨
 
-int isCircle(struct SingleListOp *target); // ÅĞ¶ÏÊÇ·ñ³É»·
+int isCircle(struct SingleListOp *target); // åˆ¤æ–­æ˜¯å¦æˆç¯
 
-int ParitySwapping(struct SingleListOp *target); // ÆæÅ¼¶Ô»»
+int ParitySwapping(struct SingleListOp *target); // å¥‡å¶å¯¹æ¢
 
-struct SingleList *GetMiddle(struct SingleListOp *target); // È¡ÖĞ¼äÖµ
+struct SingleList *GetMiddle(struct SingleListOp *target); // å–ä¸­é—´å€¼
+
+#endif

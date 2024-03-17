@@ -1,4 +1,8 @@
-#include "DoubleLinkedList.c"
+#include "DoubleLinkedList.h"
+#include "DoubleList.h"
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 int main()
 {
     struct DoubleListOp *Operater[10];

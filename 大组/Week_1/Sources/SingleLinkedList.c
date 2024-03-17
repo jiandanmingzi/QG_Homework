@@ -1,6 +1,7 @@
-#ifndef SingleLinkedList_C
-#define SingleLinkedList_C
-#include "SingleList.h"
+#include "SingleLinkedList.h"
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 struct SingleListOp
 {
     int size;                // 记录节点个数

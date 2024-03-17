@@ -5,12 +5,14 @@
 #include <stdlib.h>
 struct SingleList;
 
-struct SingleList *CreatHead(char *List_Name); // ´´½¨ĞÂÁ´±í
+struct SingleList *CreatHead(char *List_Name); // åˆ›å»ºæ–°é“¾è¡¨
 
-struct SingleList *AddNode(char *Data, struct SingleList *last); // Ìí¼Ó½Úµã
+struct SingleList *AddNode(char *Data, struct SingleList *last); // æ·»åŠ èŠ‚ç‚¹
 
-int DeletNode(struct SingleList *last, struct SingleList *Node); // É¾³ı½Úµã
+int DeletNode(struct SingleList *last, struct SingleList *Node); // åˆ é™¤èŠ‚ç‚¹
 
-int ChangeData(char *Data, struct SingleList *Node); // ĞŞ¸Ä½ÚµãÊı¾İ
+int ChangeData(char *Data, struct SingleList *Node); // ä¿®æ”¹èŠ‚ç‚¹æ•°æ®
 
-void swap(struct SingleList *First, struct SingleList *Second, struct SingleList *FirstLast); // ½»»»½ÚµãÎ»ÖÃ
+void swap(struct SingleList *First, struct SingleList *Second, struct SingleList *FirstLast); // äº¤æ¢èŠ‚ç‚¹ä½ç½®
+
+#endif

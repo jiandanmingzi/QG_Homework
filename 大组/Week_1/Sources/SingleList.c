@@ -1,6 +1,7 @@
-#ifndef SingleList_C
-#define SingleList_C
 #include "SingleList.h"
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 struct SingleList
 {
     char Data[20];       // 链表节点存储的数据
