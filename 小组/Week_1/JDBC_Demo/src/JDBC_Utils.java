@@ -29,11 +29,11 @@ public class JDBC_Utils {
         url=prop.getProperty("tableName");
         userName=prop.getProperty("userName");
         password=prop.getProperty("password");
-        String Driver=prop.getProperty("localHost");
+        String driver=prop.getProperty("localHost");
 
         //加载驱动
         try {
-            Class.forName(Driver);
+            Class.forName(driver);
         } catch (ClassNotFoundException e) {
             LOGGER.severe("Error loading JDBC driver: " + e.getMessage());
         }
@@ -66,5 +66,15 @@ public class JDBC_Utils {
             ps.close();
         if (connection!= null)
             connection.close();
+    }
+    public static void close(ResultSet rs,PreparedStatement ps) throws SQLException {
+        if (rs!= null)
+            rs.close();
+        if (ps!= null)
+            ps.close();
+    }
+    public static void close(PreparedStatement ps) throws SQLException {
+        if (ps!= null)
+            ps.close();
     }
 }

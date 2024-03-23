@@ -20,26 +20,36 @@ final public class CURD_Utils {
             return 0;
         }
 
-        //准备执行语句
+        //获取链接
         try {
-            //获取链接
-            Connection connection =JDBC_Utils.getConnection();
-            PreparedStatement ps = null;
-            try {
-                //执行语句
-                ps = connection.prepareStatement(sql);
-                for (int i = 0; i < params.length; i++)
-                    ps.setObject(i + 1, params[i]);
-                //返回影响的数据的条数
-                return ps.executeUpdate();
-            } catch (SQLException e) {
-                LOGGER.severe("Error executing SQL statement: " + e.getMessage());
-            } finally {
-                //释放资源
-                JDBC_Utils.close(ps,connection);
+            Connection_Pool pool = Pool_Factory.getPool();
+            if (pool != null) {
+                try (Connection connection = pool.getConnection()) {
+                    PreparedStatement ps = null;
+                    try {
+
+                        //执行语句
+                        ps = connection.prepareStatement(sql);
+                        for (int i = 0; i < params.length; i++)
+                            ps.setObject(i + 1, params[i]);
+
+                        //返回影响的数据的条数
+                        return ps.executeUpdate();
+
+                    } catch (SQLException e) {
+                        LOGGER.severe("Error executing SQL statement: " + e.getMessage());
+                        return 0;
+                    } finally {
+
+                        //释放资源
+                        pool.close(ps, connection);
+
+                    }
+                }
             }
-        }catch(SQLException e){
+        } catch (SQLException e) {
             LOGGER.severe("Error getting database connection: " + e.getMessage());
+            return 0;
         }
 
         return 0;
@@ -58,32 +68,36 @@ final public class CURD_Utils {
             return null;
         }
 
-        //准备执行语句
+        //获取链接
         try {
-            //获取链接
-            Connection connection =JDBC_Utils.getConnection();
-            PreparedStatement ps =null;
-            ResultSet rs = null;
-            try {
-                //执行语句
-                ps = connection.prepareStatement(sql);
-                for (int i = 0; i < params.length; i++)
-                    ps.setObject(i + 1, params[i]);
-                try{
-                    rs = ps.executeQuery();
-                    while (rs.next())
-                        handler.handle(rs);
-                    return handler.value;
-                }catch (SQLException e){
-                }finally {
-                    //释放资源
-                    JDBC_Utils.close(rs,ps,connection);
+            Connection_Pool pool = Pool_Factory.getPool();
+            if (pool != null) {
+                try (Connection connection = pool.getConnection()) {
+                    PreparedStatement ps = null;
+                    ResultSet rs = null;
+                    try {
+
+                        //执行语句
+                        ps = connection.prepareStatement(sql);
+                        for (int i = 0; i < params.length; i++)
+                            ps.setObject(i + 1, params[i]);
+                        rs=ps.executeQuery();
+                        return handler.handle(rs);
+
+                    } catch (SQLException e) {
+                        LOGGER.severe("Error executing SQL statement: " + e.getMessage());
+                        return null;
+                    }finally {
+
+                        //释放资源
+                        pool.close(rs,ps, connection);
+
+                    }
                 }
-            } catch (SQLException e) {
-                LOGGER.severe("Error executing SQL statement: " + e.getMessage());
             }
-        }catch(SQLException e){
+        } catch (SQLException e) {
             LOGGER.severe("Error getting database connection: " + e.getMessage());
+            return null;
         }
 
         return null;
