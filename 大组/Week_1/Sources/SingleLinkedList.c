@@ -137,7 +137,7 @@ int *SearchLocate(struct SingleListOp *target, char *Data) // 根据数据搜索
 struct SingleListOp *CreatSingleList(char *Name) // 创建新链表
 {
     struct SingleListOp *HeadNode = NULL;
-    HeadNode = (struct SingleListOp *)malloc(sizeof(struct SingleListOp *));
+    HeadNode = (struct SingleListOp *)malloc(sizeof(struct SingleListOp));
     if (HeadNode != NULL)
     {
         HeadNode->head = CreatHead(Name);

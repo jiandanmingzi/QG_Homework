@@ -11,7 +11,7 @@ struct SingleList
 struct SingleList *CreatHead(char *List_Name) // 创建新链表
 {
     struct SingleList *headList = NULL;
-    headList = (struct SingleList *)malloc(sizeof(struct SingleList *));
+    headList = (struct SingleList *)malloc(sizeof(struct SingleList));
     if (headList != NULL)
     {
         strcpy(headList->Data,List_Name);
@@ -23,7 +23,7 @@ struct SingleList *CreatHead(char *List_Name) // 创建新链表
 struct SingleList *AddNode(char *Data, struct SingleList *last) // 添加节点
 {
     struct SingleList *Node = NULL;
-    Node = (struct SingleList *)malloc(sizeof(struct SingleList *));
+    Node = (struct SingleList *)malloc(sizeof(struct SingleList));
     if (Node != NULL)
     {
         Node->next = last->next;

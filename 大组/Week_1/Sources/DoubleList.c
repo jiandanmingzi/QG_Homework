@@ -12,7 +12,7 @@ struct DoubleList
 struct DoubleList *CreatHead(char List_Name[20]) // 创建新链表
 {
     struct DoubleList *headList = NULL;
-    headList = (struct DoubleList *)malloc(sizeof(struct DoubleList *));
+    headList = (struct DoubleList *)malloc(sizeof(struct DoubleList));
     if (headList != NULL)
     {
         strcpy(headList->Data, List_Name);
@@ -24,7 +24,7 @@ struct DoubleList *CreatHead(char List_Name[20]) // 创建新链表
 struct DoubleList *AddNode(char Data[20], struct DoubleList *last) // 添加节点
 {
     struct DoubleList *Node = NULL;
-    Node = (struct DoubleList *)malloc(sizeof(struct DoubleList *));
+    Node = (struct DoubleList *)malloc(sizeof(struct DoubleList));
     if (Node != NULL)
     {
         Node->last = last;

@@ -129,7 +129,7 @@ struct DoubleListOp *CreatDoubleList(char *Name) // 创建新链表
 {
     struct DoubleListOp
         *HeadNode = NULL;
-    HeadNode = (struct DoubleListOp *)malloc(sizeof(struct DoubleListOp *));
+    HeadNode = (struct DoubleListOp *)malloc(sizeof(struct DoubleListOp));
     if (HeadNode != NULL)
     {
         HeadNode->head = CreatHead(Name);
