@@ -47,14 +47,17 @@ int main()
     int n = ReadData(&arr);
     if (n != 0)
     {
-        int temp[200000];
-        for (int i = 0; i < n; i++)
-            temp[i] = arr[i];
-        int time;
-        for (int Snums = 0; Snums < 7; Snums++)
-        {
-            time = SingleDataTest(sorts[Snums].sort, n);
-            printf("%s : %d 个数据耗时: %d ms\n", sorts[Snums].name, n, time);
+        int* temp = (int*)malloc(n * sizeof(int));
+        if (temp != NULL) {
+            int time;
+            for (int Snums = 0; Snums < 7; Snums++)
+            {
+                for (int i = 0; i < n; i++)
+                    temp[i] = arr[i];
+                time = GetTime(sorts[Snums].sort,temp ,n);
+                printf("%s : %d 个数据耗时: %d ms\n", sorts[Snums].name, n, time);
+            }
+            free(temp);
         }
     }
     else
