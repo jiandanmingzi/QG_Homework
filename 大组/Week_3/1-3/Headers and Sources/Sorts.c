@@ -4,7 +4,7 @@
 #include "Sort.h"
 
 // 冒泡排序
-void BubbleSort(int* arr, int n)
+void BubbleSort(int *arr, int n)
 {
     int temp, flag, right = n - 1, left = 0;
     while (left < right)
@@ -38,7 +38,7 @@ void BubbleSort(int* arr, int n)
 }
 
 // 计数排序
-void CountSort(int* arr, int n)
+void CountSort(int *arr, int n)
 {
     int max = arr[0], min = arr[0];
     for (int i = 1; i < n; i++)
@@ -48,7 +48,7 @@ void CountSort(int* arr, int n)
         if (arr[i] < min)
             min = arr[i];
     }
-    int* count = (int*)malloc((max + 1 - min) * sizeof(int));
+    int *count = (int *)malloc((max + 1 - min) * sizeof(int));
     if (count != NULL)
     {
         for (int i = 0; i <= max - min; i++)
@@ -57,7 +57,7 @@ void CountSort(int* arr, int n)
             count[arr[i] - min]++;
         for (int i = 1; i <= max - min; i++)
             count[i] += count[i - 1];
-        int* temp = (int*)malloc(n * sizeof(int));
+        int *temp = (int *)malloc(n * sizeof(int));
         if (temp != NULL)
         {
             for (int i = n - 1; i >= 0; i--)
@@ -78,7 +78,7 @@ void CountSort(int* arr, int n)
 }
 
 // 插入排序
-void InsertSort(int* arr, int n)
+void InsertSort(int *arr, int n)
 {
     int i, j, temp;
     for (i = 1; i < n; i++)
@@ -94,7 +94,7 @@ void InsertSort(int* arr, int n)
 
 //--------------------------------------------------
 // 归并排序
-void Merge(int* arr, int* temp, int left, int right)
+void Merge(int *arr, int *temp, int left, int right)
 {
     int mid = (left + right) / 2;
     int LNode = left, RNode = mid + 1, NowNode = left;
@@ -116,7 +116,7 @@ void Merge(int* arr, int* temp, int left, int right)
         arr[NowNode] = temp[NowNode];
 }
 
-void Divde(int* arr, int* temp, int left, int right)
+void Divde(int *arr, int *temp, int left, int right)
 {
     if (left < right)
     {
@@ -127,9 +127,9 @@ void Divde(int* arr, int* temp, int left, int right)
     }
 }
 
-void MergeSort(int* arr, int n)
+void MergeSort(int *arr, int n)
 {
-    int* temp = (int*)malloc(n * sizeof(int));
+    int *temp = (int *)malloc(n * sizeof(int));
     if (temp != NULL)
     {
         Divde(arr, temp, 0, n - 1);
@@ -141,7 +141,7 @@ void MergeSort(int* arr, int n)
 //-----------------------------------------
 
 // 递归版快速排序
-void recursionQuickSort(int* arr, int left, int right)
+void recursionQuickSort(int *arr, int left, int right)
 {
     if (left < right)
     {
@@ -171,16 +171,109 @@ void recursionQuickSort(int* arr, int left, int right)
         recursionQuickSort(arr, LNode + 1, right);
     }
 }
+
+// 递归版快速排序随机取轴优化
+void recursionQuickSortRandom(int *arr, int left, int right)
+{
+    if (left < right)
+    {
+        int LNode, RNode, temp, pivot;
+        pivot = rand() % (right - left + 1) + left;
+        temp = arr[left];
+        arr[left] = arr[pivot];
+        arr[pivot] = temp;
+        LNode = left;
+        RNode = right;
+        temp = arr[left];
+        while (LNode < RNode)
+        {
+            while (LNode < RNode && arr[RNode] >= temp)
+                RNode--;
+            if (LNode < RNode)
+            {
+                arr[LNode] = arr[RNode];
+                LNode++;
+            }
+            while (LNode < RNode && arr[LNode] < temp)
+                LNode++;
+            if (LNode < RNode)
+            {
+                arr[RNode] = arr[LNode];
+                RNode--;
+            }
+        }
+        arr[LNode] = temp;
+        recursionQuickSortRandom(arr, left, LNode - 1);
+        recursionQuickSortRandom(arr, LNode + 1, right);
+    }
+}
+
+// 递归版快速排序三枢轴优化
+void recursionQuickSortThree(int *arr, int left, int right)
+{
+    if (left < right)
+    {
+        int LNode, RNode, temp, pivot1, pivot2;
+        pivot1 = rand() % (right - left + 1) + left;
+        pivot2 = rand() % (right - left + 1) + left;
+        if (arr[pivot1] > arr[pivot2])
+        {
+            temp = pivot1;
+            pivot1 = pivot2;
+            pivot2 = temp;
+        }
+        temp = arr[left];
+        arr[left] = arr[pivot1];
+        arr[pivot1] = temp;
+        temp = arr[right];
+        arr[right] = arr[pivot2];
+        arr[pivot2] = temp;
+        LNode = left;
+        RNode = right;
+        temp = arr[left];
+        while (LNode < RNode)
+        {
+            while (LNode < RNode && arr[RNode] >= temp)
+                RNode--;
+            if (LNode < RNode)
+            {
+                arr[LNode] = arr[RNode];
+                LNode++;
+            }
+            while (LNode < RNode && arr[LNode] < temp)
+                LNode++;
+            if (LNode < RNode)
+            {
+                arr[RNode] = arr[LNode];
+                RNode--;
+            }
+        }
+        arr[LNode] = temp;
+        recursionQuickSortThree(arr, left, LNode - 1);
+        recursionQuickSortThree(arr, LNode + 1, right);
+    }
+}
+
 // 入口
-void RQuickSort(int* arr, int n)
+void RQuickSort(int *arr, int n)
 {
     recursionQuickSort(arr, 0, n - 1);
 }
 
-// 非递归版快速排序
-void NonRecirsopmQuickSort(int* arr, int n)
+void RQuickSortR(int *arr, int n)
 {
-    int* stack = (int*)malloc(n * sizeof(int));
+    recursionQuickSortRandom(arr, 0, n - 1);
+}
+
+void RQuickSortT(int *arr, int n)
+{
+    recursionQuickSortThree(arr, 0, n - 1);
+}
+
+// 非递归版快速排序
+void NonRecirsopmQuickSort(int *arr, int n)
+{
+    int *stack = (int *)malloc(n * sizeof(int));
     if (stack != NULL)
     {
         int top = -1, left, right, LNode, RNode, temp;
@@ -237,7 +330,7 @@ void NonRecirsopmQuickSort(int* arr, int n)
 }
 
 // 基数排序
-void RadixSort(int* arr, int n)
+void RadixSort(int *arr, int n)
 {
     int max = arr[0];
     for (int i = 1; i < n; i++)
@@ -245,10 +338,10 @@ void RadixSort(int* arr, int n)
         if (arr[i] > max)
             max = arr[i];
     }
-    int* count = (int*)malloc(10 * sizeof(int));
+    int *count = (int *)malloc(10 * sizeof(int));
     if (count != NULL)
     {
-        int* temp = (int*)malloc(n * sizeof(int));
+        int *temp = (int *)malloc(n * sizeof(int));
         if (temp != NULL)
         {
             int exp = 1;
