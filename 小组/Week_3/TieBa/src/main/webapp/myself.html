@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>个人中心</title>
+</head>
+<body>
+    <h3>论坛列表:</h3>
+    <div id="myforumList"></div>
+</body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $.ajax({
+            url: 'http://localhost:8080/TieBa/myselfServlet',
+            type: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                if (data && Array.isArray(data)) {
+                    let myforumListDiv = $('#myforumList');
+                    myforumListDiv.empty();
+                    data.forEach(function(forum) {
+                        let forumDiv = $('<div></div>');
+                        forumDiv.append('<h3>' + forum.forumName + '</h3>');
+                        forumDiv.append('<p>介绍: ' + forum.Introduction + '</p>');
+                        forumDiv.append('<p>创建时间: ' + new Date(forum.FoundTime).toLocaleString() + '</p>');
+                        forumDiv.append('<p>关注数: ' + forum.follow + '</p>');
+                        myforumListDiv.append(forumDiv);
+                    });
+                } else {
+                    console.error('未获取到论坛数据或数据格式不正确');
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.error('请求论坛列表数据时发生错误: ' + textStatus, errorThrown);
+            }
+        });
+    });
+</script>
+</html>
