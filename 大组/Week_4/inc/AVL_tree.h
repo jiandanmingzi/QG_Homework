@@ -10,25 +10,25 @@
 
 typedef int ElemType;
 
-typedef struct Node
+typedef struct AVL_Node
 {
     ElemType value;
-    struct Node *left, *right, *parent;
+    struct AVL_Node *left, *right, *parent;
     Height height;
-} Node, *NodePtr;
+} AVL_Node, *AVL_NodePtr;
 
 typedef struct AVLTree
 {
-    NodePtr root;
+    AVL_NodePtr root;
 } AVLTree, *AVLTreePtr;
 
-void AVLT_rotateRight(AVLTreePtr, NodePtr);
+void AVLT_rotateRight(AVLTreePtr, AVL_NodePtr);
 
-void AVLT_rotateLeft(AVLTreePtr, NodePtr);
+void AVLT_rotateLeft(AVLTreePtr, AVL_NodePtr);
 
-Height AVLT_HeightFactor(NodePtr);
+Height AVLT_HeightFactor(AVL_NodePtr);
 
-Status AVLT_init(AVLTreePtr);
+AVLTreePtr AVLT_init();
 
 Status AVLT_insert(AVLTreePtr, ElemType);
 
@@ -36,24 +36,24 @@ Status AVLT_delete(AVLTreePtr, ElemType);
 
 Status AVLT_search(AVLTreePtr, ElemType);
 
-Status AVLT_preorderI(AVLTreePtr, void (*visit)(NodePtr));
+Status AVLT_preorderI(AVLTreePtr, void (*visit)(AVL_NodePtr));
 
-Status AVLT_preorderR(AVLTreePtr, void (*visit)(NodePtr));
+Status AVLT_preorderR(AVL_NodePtr, void (*visit)(AVL_NodePtr));
 
-Status AVLT_inorderI(AVLTreePtr, void (*visit)(NodePtr));
+Status AVLT_inorderI(AVLTreePtr, void (*visit)(AVL_NodePtr));
 
-Status AVLT_inorderR(AVLTreePtr, void (*visit)(NodePtr));
+Status AVLT_inorderR(AVL_NodePtr, void (*visit)(AVL_NodePtr));
 
-Status AVLT_postorderI(AVLTreePtr, void (*visit)(NodePtr));
+Status AVLT_postorderI(AVLTreePtr, void (*visit)(AVL_NodePtr));
 
-Status AVLT_postorderR(AVLTreePtr, void (*visit)(NodePtr));
+Status AVLT_postorderR(AVL_NodePtr, void (*visit)(AVL_NodePtr));
 
-Status AVLT_levelOrder(AVLTreePtr, void (*visit)(NodePtr));
+Status AVLT_levelOrder(AVLTreePtr, void (*visit)(AVL_NodePtr));
 
-void AVLT_rebalance(AVLTreePtr, NodePtr, Height, Height);
+void AVLT_rebalance(AVLTreePtr, AVL_NodePtr, Height, Height);
 
-NodePtr AVLT_createNode(ElemType);
+AVL_NodePtr AVLT_createAVL_Node(ElemType);
 
-NodePtr AVLT_searchNode(AVLTreePtr, ElemType);
+AVL_NodePtr AVLT_searchAVL_Node(AVLTreePtr, ElemType);
 
 #endif

@@ -1,13 +1,13 @@
-#include<stdio.h>
-#include<stdlib.h>
-#include"binary_sort_tree.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include "binary_sort_tree.h"
 
-Status BST_init(BinarySortTreePtr BST)
+BinarySortTreePtr BST_init()
 {
-    if (BST == NULL)
-        return failed;
-    BST->root = NULL;
-    return succeed;
+    BinarySortTreePtr BST = (BinarySortTreePtr)malloc(sizeof(BinarySortTree));
+    if (BST != NULL)
+        BST->root = NULL;
+    return BST;
 }
 
 Status BST_insert(BinarySortTreePtr BST, ElemType value)
@@ -118,18 +118,14 @@ Status BST_preorderI(BinarySortTreePtr BST, void (*visit)(NodePtr))
     return succeed;
 }
 
-Status BST_preorderR(BinarySortTreePtr BST, void (*visit)(NodePtr))
+Status BST_preorderR(NodePtr current, void (*visit)(NodePtr))
 {
-    if (BST == NULL || BST->root == NULL)
-        return failed;
-    NodePtr current = BST->root;
     visit(current);
     if (current->left != NULL)
         BST_preorderR(current->left, visit);
     if (current->right != NULL)
         BST_preorderR(current->right, visit);
     return succeed;
-
 }
 
 Status BST_inorderI(BinarySortTreePtr BST, void (*visit)(NodePtr))
@@ -156,13 +152,14 @@ Status BST_inorderI(BinarySortTreePtr BST, void (*visit)(NodePtr))
     return succeed;
 }
 
-Status BST_inorderR(BinarySortTreePtr BST, void (*visit)(NodePtr))
+Status BST_inorderR(NodePtr current, void (*visit)(NodePtr))
 {
-    if (BST == NULL || BST->root == NULL)
-        return failed;
-    BST_inorderR(BST->root->left, visit);
-    visit(BST->root);
-    BST_inorderR(BST->root->right, visit);
+    if (current != NULL)
+    {
+        BST_inorderR(current->left, visit);
+        visit(current);
+        BST_inorderR(current->right, visit);
+    }
     return succeed;
 }
 
@@ -195,13 +192,14 @@ Status BST_postorderI(BinarySortTreePtr BST, void (*visit)(NodePtr))
     return succeed;
 }
 
-Status BST_postorderR(BinarySortTreePtr BST, void (*visit)(NodePtr))
+Status BST_postorderR(NodePtr current, void (*visit)(NodePtr))
 {
-    if (BST == NULL || BST->root == NULL)
-        return failed;
-    BST_postorderR(BST->root->left, visit);
-    BST_postorderR(BST->root->right, visit);
-    visit(BST->root);
+    if (current != NULL)
+    {
+        BST_postorderR(current->left, visit);
+        BST_postorderR(current->right, visit);
+        visit(current);
+    }
     return succeed;
 }
 
@@ -209,17 +207,24 @@ Status BST_levelOrder(BinarySortTreePtr BST, void (*visit)(NodePtr))
 {
     if (BST == NULL || BST->root == NULL)
         return failed;
-    NodePtr queue[100];
-    int front = 0, rear = 0;
-    queue[rear++] = BST->root;
-    while (front != rear)
+    NodePtr current[100],kids[100];
+    current[0] = BST->root;
+    int currentNums = 1,kidsNums = 0;
+    while (currentNums!=0)
     {
-        NodePtr current = queue[front++];
-        visit(current);
-        if (current->left != NULL)
-            queue[rear++] = current->left;
-        if (current->right != NULL)
-            queue[rear++] = current->right;
+        for (int i = 0; i < currentNums; i++)
+        {
+            visit(current[i]);
+            if (current[i]->left != NULL)
+                kids[kidsNums++] = current[i]->left;
+            if (current[i]->right != NULL)
+                kids[kidsNums++] = current[i]->right;        
+        }
+        printf("\n");
+        currentNums = kidsNums;
+        for (int i = 0; i < kidsNums; i++)
+            current[i] = kids[i];
+        kidsNums = 0;
     }
     return succeed;
 }

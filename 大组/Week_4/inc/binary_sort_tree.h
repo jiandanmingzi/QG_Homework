@@ -24,10 +24,8 @@ typedef struct BinarySortTree{
 
 /**
  * BST initialize
- * @param BinarySortTreePtr BST
- * @return is complete
  */
-Status BST_init(BinarySortTreePtr);
+BinarySortTreePtr BST_init();
 
 /**
  * BST insert
@@ -67,7 +65,7 @@ Status BST_preorderI(BinarySortTreePtr, void (*visit)(NodePtr));
  * @param (*visit) callback
  * @return is successful
  */
-Status BST_preorderR(BinarySortTreePtr, void (*visit)(NodePtr));
+Status BST_preorderR(NodePtr, void (*visit)(NodePtr));
 
 /**
  * BST inorder traversal without recursion
@@ -83,7 +81,7 @@ Status BST_inorderI(BinarySortTreePtr, void (*visit)(NodePtr));
  * @param (*visit) callback
  * @return is successful
  */
-Status BST_inorderR(BinarySortTreePtr, void (*visit)(NodePtr));
+Status BST_inorderR(NodePtr, void (*visit)(NodePtr));
 
 /**
  * BST preorder traversal without recursion
@@ -99,7 +97,7 @@ Status BST_postorderI(BinarySortTreePtr, void (*visit)(NodePtr));
  * @param (*visit) callback
  * @return is successful
  */
-Status BST_postorderR(BinarySortTreePtr, void (*visit)(NodePtr));
+Status BST_postorderR(NodePtr, void (*visit)(NodePtr));
 
 /**
  * BST level order traversal

@@ -15,54 +15,42 @@ enum Colors
     BLACK
 };
 
-typedef struct Node
+typedef struct RBT_Node
 {
     ElemType value;
     enum Colors color;
-    struct Node *left, *right, *parent;
-} Node, *NodePtr;
+    struct RBT_Node *left, *right, *parent;
+} RBT_Node, *RBT_NodePtr;
 
 typedef struct RedBlackTree
 {
-    NodePtr root;
+    RBT_NodePtr root;
 } RedBlackTree, *RedBlackTreePtr;
 
-Status RBT_init(RedBlackTreePtr);
+RedBlackTreePtr RBT_init();
 
-Status RBT_leftRotate(RedBlackTreePtr, NodePtr);
+Status RBT_leftRotate(RedBlackTreePtr, RBT_NodePtr);
 
-Status RBT_rightRotate(RedBlackTreePtr, NodePtr);
+Status RBT_rightRotate(RedBlackTreePtr, RBT_NodePtr);
 
-NodePtr RBT_createNode(ElemType, enum Colors);
+RBT_NodePtr RBT_createRBT_Node(ElemType, enum Colors);
 
-void RBT_insertFixup(RedBlackTreePtr, NodePtr);
+void RBT_insertFixup(RedBlackTreePtr, RBT_NodePtr);
 
 Status RBT_insert(RedBlackTreePtr, ElemType);
 
-void RBT_transplant(RedBlackTreePtr, NodePtr, NodePtr);
+void RBT_transplant(RedBlackTreePtr, RBT_NodePtr, RBT_NodePtr);
 
-void RBT_deleteFixup(RedBlackTreePtr, NodePtr);
+void RBT_deleteFixup(RedBlackTreePtr, RBT_NodePtr);
 
-NodePtr RBT_searchNode(RedBlackTreePtr, ElemType);
+RBT_NodePtr RBT_searchRBT_Node(RedBlackTreePtr, ElemType);
 
-NodePtr RBT_minimum(NodePtr);
+RBT_NodePtr RBT_minimum(RBT_NodePtr);
 
 Status RBT_delete(RedBlackTreePtr, ElemType);
 
 Status RBT_search(RedBlackTreePtr, ElemType);
 
-Status RBT_preorderI(RedBlackTreePtr, void (*visit)(NodePtr));
-
-Status RBT_preorderR(RedBlackTreePtr, void (*visit)(NodePtr));
-
-Status RBT_inorderI(RedBlackTreePtr, void (*visit)(NodePtr));
-
-Status RBT_inorderR(RedBlackTreePtr, void (*visit)(NodePtr));
-
-Status RBT_postorderI(RedBlackTreePtr, void (*visit)(NodePtr));
-
-Status RBT_postorderR(RedBlackTreePtr, void (*visit)(NodePtr));
-
-Status RBT_levelorder(RedBlackTreePtr, void (*visit)(NodePtr));
+Status RBT_levelorder(RedBlackTreePtr, void (*visit)(RBT_NodePtr));
 
 #endif

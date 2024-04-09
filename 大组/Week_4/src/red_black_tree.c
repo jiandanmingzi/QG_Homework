@@ -2,112 +2,111 @@
 #include <stdlib.h>
 #include "red_black_tree.h"
 
-Status RBT_init(RedBlackTreePtr RBT)
+RedBlackTreePtr RBT_init()
 {
-    RBT = (RedBlackTreePtr)malloc(sizeof(RedBlackTree));
-    if (RBT == NULL)
-        return failed;
-    RBT->root = NULL;
-    return succeed;
+    RedBlackTreePtr RBT = (RedBlackTreePtr)malloc(sizeof(RedBlackTree));
+    if (RBT != NULL)
+        RBT->root = NULL;
+    return RBT;
 }
 
-Status RBT_leftRotate(RedBlackTreePtr RBT, NodePtr node)
+Status RBT_leftRotate(RedBlackTreePtr RBT, RBT_NodePtr RBT_Node)
 {
-    NodePtr right = node->right;
-    node->right = right->left;
+    RBT_NodePtr right = RBT_Node->right;
+    RBT_Node->right = right->left;
     if (right->left != NULL)
-        right->left->parent = node;
-    right->parent = node->parent;
-    if (node->parent == NULL)
+        right->left->parent = RBT_Node;
+    right->parent = RBT_Node->parent;
+    if (RBT_Node->parent == NULL)
         RBT->root = right;
-    else if (node == node->parent->left)
-        node->parent->left = right;
+    else if (RBT_Node == RBT_Node->parent->left)
+        RBT_Node->parent->left = right;
     else
-        node->parent->right = right;
-    right->left = node;
-    node->parent = right;
+        RBT_Node->parent->right = right;
+    right->left = RBT_Node;
+    RBT_Node->parent = right;
     return succeed;
 }
 
-Status RBT_rightRotate(RedBlackTreePtr RBT, NodePtr node)
+Status RBT_rightRotate(RedBlackTreePtr RBT, RBT_NodePtr RBT_Node)
 {
-    NodePtr left = node->left;
-    node->left = left->right;
+    RBT_NodePtr left = RBT_Node->left;
+    RBT_Node->left = left->right;
     if (left->right != NULL)
-        left->right->parent = node;
-    left->parent = node->parent;
-    if (node->parent == NULL)
+        left->right->parent = RBT_Node;
+    left->parent = RBT_Node->parent;
+    if (RBT_Node->parent == NULL)
         RBT->root = left;
-    else if (node == node->parent->right)
-        node->parent->right = left;
+    else if (RBT_Node == RBT_Node->parent->right)
+        RBT_Node->parent->right = left;
     else
-        node->parent->left = left;
-    left->right = node;
-    node->parent = left;
+        RBT_Node->parent->left = left;
+    left->right = RBT_Node;
+    RBT_Node->parent = left;
     return succeed;
 }
 
-NodePtr RBT_createNode(ElemType value, enum Colors color)
+RBT_NodePtr RBT_createRBT_Node(ElemType value, enum Colors color)
 {
-    NodePtr newNode = (NodePtr)malloc(sizeof(Node));
-    if (newNode == NULL)
+    RBT_NodePtr newRBT_Node = (RBT_NodePtr)malloc(sizeof(RBT_Node));
+    if (newRBT_Node == NULL)
     {
         printf("Memory allocation failed\n");
         return NULL;
     }
-    newNode->value = value;
-    newNode->color = color;
-    newNode->left = NULL;
-    newNode->right = NULL;
-    newNode->parent = NULL;
-    return newNode;
+    newRBT_Node->value = value;
+    newRBT_Node->color = color;
+    newRBT_Node->left = NULL;
+    newRBT_Node->right = NULL;
+    newRBT_Node->parent = NULL;
+    return newRBT_Node;
 }
 
-void RBT_insertFixup(RedBlackTreePtr RBT, NodePtr node)
+void RBT_insertFixup(RedBlackTreePtr RBT, RBT_NodePtr RBT_Node)
 {
-    while (node->parent != NULL && node->parent->color == RED)
+    while (RBT_Node->parent != NULL && RBT_Node->parent->color == RED)
     {
-        NodePtr grandparent = node->parent->parent;
-        if (node->parent == grandparent->left)
+        RBT_NodePtr grandparent = RBT_Node->parent->parent;
+        if (RBT_Node->parent == grandparent->left)
         {
-            NodePtr uncle = grandparent->right;
+            RBT_NodePtr uncle = grandparent->right;
             if (uncle != NULL && uncle->color == RED)
             {
-                node->parent->color = BLACK;
+                RBT_Node->parent->color = BLACK;
                 uncle->color = BLACK;
                 grandparent->color = RED;
-                node = grandparent;
+                RBT_Node = grandparent;
             }
             else
             {
-                if (node == node->parent->right)
+                if (RBT_Node == RBT_Node->parent->right)
                 {
-                    node = node->parent;
-                    RBT_leftRotate(RBT, node);
+                    RBT_Node = RBT_Node->parent;
+                    RBT_leftRotate(RBT, RBT_Node);
                 }
-                node->parent->color = BLACK;
+                RBT_Node->parent->color = BLACK;
                 grandparent->color = RED;
                 RBT_rightRotate(RBT, grandparent);
             }
         }
         else
         {
-            NodePtr uncle = grandparent->left;
+            RBT_NodePtr uncle = grandparent->left;
             if (uncle != NULL && uncle->color == RED)
             {
-                node->parent->color = BLACK;
+                RBT_Node->parent->color = BLACK;
                 uncle->color = BLACK;
                 grandparent->color = RED;
-                node = grandparent;
+                RBT_Node = grandparent;
             }
             else
             {
-                if (node == node->parent->left)
+                if (RBT_Node == RBT_Node->parent->left)
                 {
-                    node = node->parent;
-                    RBT_rightRotate(RBT, node);
+                    RBT_Node = RBT_Node->parent;
+                    RBT_rightRotate(RBT, RBT_Node);
                 }
-                node->parent->color = BLACK;
+                RBT_Node->parent->color = BLACK;
                 grandparent->color = RED;
                 RBT_leftRotate(RBT, grandparent);
             }
@@ -118,12 +117,12 @@ void RBT_insertFixup(RedBlackTreePtr RBT, NodePtr node)
 
 Status RBT_insert(RedBlackTreePtr RBT, ElemType value)
 {
-    NodePtr newNode = RBT_createNode(value, RED);
-    if (newNode == NULL)
+    RBT_NodePtr newRBT_Node = RBT_createRBT_Node(value, RED);
+    if (newRBT_Node == NULL)
         return failed;
 
-    NodePtr current = RBT->root;
-    NodePtr parent = NULL;
+    RBT_NodePtr current = RBT->root;
+    RBT_NodePtr parent = NULL;
 
     while (current != NULL)
     {
@@ -134,26 +133,26 @@ Status RBT_insert(RedBlackTreePtr RBT, ElemType value)
             current = current->right;
         else
         {
-            free(newNode);
+            free(newRBT_Node);
             return failed;
         }
     }
 
-    newNode->parent = parent;
+    newRBT_Node->parent = parent;
 
     if (parent == NULL)
-        RBT->root = newNode;
+        RBT->root = newRBT_Node;
     else if (value < parent->value)
-        parent->left = newNode;
+        parent->left = newRBT_Node;
     else
-        parent->right = newNode;
+        parent->right = newRBT_Node;
 
-    RBT_insertFixup(RBT, newNode);
+    RBT_insertFixup(RBT, newRBT_Node);
 
     return succeed;
 }
 
-void RBT_transplant(RedBlackTreePtr RBT, NodePtr u, NodePtr v)
+void RBT_transplant(RedBlackTreePtr RBT, RBT_NodePtr u, RBT_NodePtr v)
 {
     if (u->parent == NULL)
         RBT->root = v;
@@ -165,13 +164,13 @@ void RBT_transplant(RedBlackTreePtr RBT, NodePtr u, NodePtr v)
         v->parent = u->parent;
 }
 
-void RBT_deleteFixup(RedBlackTreePtr RBT, NodePtr x)
+void RBT_deleteFixup(RedBlackTreePtr RBT, RBT_NodePtr x)
 {
     while (x != RBT->root && x != NULL && x->color == BLACK)
     {
         if (x == x->parent->left)
         {
-            NodePtr w = x->parent->right;
+            RBT_NodePtr w = x->parent->right;
             if (w->color == RED)
             {
                 w->color = BLACK;
@@ -202,7 +201,7 @@ void RBT_deleteFixup(RedBlackTreePtr RBT, NodePtr x)
         }
         else
         {
-            NodePtr w = x->parent->left;
+            RBT_NodePtr w = x->parent->left;
             if (w->color == RED)
             {
                 w->color = BLACK;
@@ -236,9 +235,9 @@ void RBT_deleteFixup(RedBlackTreePtr RBT, NodePtr x)
         x->color = BLACK;
 }
 
-NodePtr RBT_searchNode(RedBlackTreePtr RBT, ElemType value)
+RBT_NodePtr RBT_searchRBT_Node(RedBlackTreePtr RBT, ElemType value)
 {
-    NodePtr current = RBT->root;
+    RBT_NodePtr current = RBT->root;
     while (current != NULL)
     {
         if (value == current->value)
@@ -251,39 +250,39 @@ NodePtr RBT_searchNode(RedBlackTreePtr RBT, ElemType value)
     return NULL;
 }
 
-NodePtr RBT_minimum(NodePtr node)
+RBT_NodePtr RBT_minimum(RBT_NodePtr RBT_Node)
 {
-    while (node->left != NULL)
-        node = node->left;
-    return node;
+    while (RBT_Node->left != NULL)
+        RBT_Node = RBT_Node->left;
+    return RBT_Node;
 }
 
 Status RBT_delete(RedBlackTreePtr RBT, ElemType value)
 {
-    NodePtr node = RBT_searchNode(RBT, value);
-    if (node == NULL)
+    RBT_NodePtr RBT_Node = RBT_searchRBT_Node(RBT, value);
+    if (RBT_Node == NULL)
         return failed;
 
-    NodePtr y = node;
-    NodePtr x;
+    RBT_NodePtr y = RBT_Node;
+    RBT_NodePtr x;
     enum Colors yOriginalColor = y->color;
 
-    if (node->left == NULL)
+    if (RBT_Node->left == NULL)
     {
-        x = node->right;
-        RBT_transplant(RBT, node, node->right);
+        x = RBT_Node->right;
+        RBT_transplant(RBT, RBT_Node, RBT_Node->right);
     }
-    else if (node->right == NULL)
+    else if (RBT_Node->right == NULL)
     {
-        x = node->left;
-        RBT_transplant(RBT, node, node->left);
+        x = RBT_Node->left;
+        RBT_transplant(RBT, RBT_Node, RBT_Node->left);
     }
     else
     {
-        y = RBT_minimum(node->right);
+        y = RBT_minimum(RBT_Node->right);
         yOriginalColor = y->color;
         x = y->right;
-        if (y->parent == node)
+        if (y->parent == RBT_Node)
         {
             if (x != NULL)
                 x->parent = y;
@@ -291,25 +290,25 @@ Status RBT_delete(RedBlackTreePtr RBT, ElemType value)
         else
         {
             RBT_transplant(RBT, y, y->right);
-            y->right = node->right;
+            y->right = RBT_Node->right;
             y->right->parent = y;
         }
-        RBT_transplant(RBT, node, y);
-        y->left = node->left;
+        RBT_transplant(RBT, RBT_Node, y);
+        y->left = RBT_Node->left;
         y->left->parent = y;
-        y->color = node->color;
+        y->color = RBT_Node->color;
     }
 
     if (yOriginalColor == BLACK)
         RBT_deleteFixup(RBT, x);
 
-    free(node);
+    free(RBT_Node);
     return succeed;
 }
 
 Status RBT_search(RedBlackTreePtr RBT, ElemType value)
 {
-    NodePtr current = RBT->root;
+    RBT_NodePtr current = RBT->root;
     while (current != NULL)
     {
         if (value == current->value)
