@@ -1,11 +1,12 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include "AVL_tree.c"
-#include "max_heap.c"
-#include "min_heap.c"
-#include "binary_sort_tree.c"
-#include "red_black_tree.c"
+#include "AVL_tree.h"
+#include "max_heap.h"
+#include "min_heap.h"
+#include "binary_sort_tree.h"
+#include "red_black_tree.h"
 
 void printBST(NodePtr node)
 {
@@ -96,8 +97,8 @@ int main()
 {
     int nums[30];
     BinarySortTreePtr BST = BST_init();
-    max_heap *max_heap = create_max_heap(30);
-    min_heap *min_heap = create_min_heap(30);
+    max_heap* max_heap = create_max_heap(30);
+    min_heap* min_heap = create_min_heap(30);
     AVLTreePtr AVL = AVLT_init();
     RedBlackTreePtr RBT = RBT_init();
     srand((unsigned int)time(NULL));
