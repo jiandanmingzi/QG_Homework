@@ -1,105 +1,82 @@
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.LinkedList;
 import java.util.Properties;
 import java.util.Queue;
-import java.sql.*;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.LinkedList;
 import java.util.logging.Logger;
 
 public class Connection_Pool {
-    private static final Logger LOGGER = Logger.getLogger(CURD_Utils.class.getName());
-
+    private static final Logger LOGGER = Logger.getLogger(Connection_Pool.class.getName());
+    static volatile Queue<Connection> connections = new LinkedList<Connection>();
+    private static final ReentrantLock lock = new ReentrantLock();
     private static final int maxConnections;
-    public static volatile boolean inited =false;
-    volatile Queue<Connection> connections ;
-    private final ReentrantLock lock=new ReentrantLock();
-
-    public Connection_Pool(){}
-
-    static{
+    static {
         //加载配置文件
         Properties prop = new Properties();
         InputStream input;
         try {
-            input = new FileInputStream("config.properties");
+            input = Connection_Pool.class.getClassLoader().getResourceAsStream("config.properties");
             prop.load(input);
         } catch (IOException e) {
-            LOGGER.severe("Error closing input stream: " + e.getMessage());
+            LOGGER.severe("Error loading config.properties: " + e.getMessage());
         }
-        maxConnections = Integer.parseInt(prop.getProperty("maxConnections")) ;
-    }
-
-
-    public void init() throws SQLException {
-        if(!inited){
-            if(!lock.isLocked()){
-                lock.lock();
-                try {
-                    if (!inited) {
-                        connections = new LinkedList<>();
-                            for (int i = 0; i < maxConnections; i++)
-                                connections.add(JDBC_Utils.getConnection());
-
-                        inited = true;
-                    }
-                }finally{
-                    lock.unlock();
-                }
+        maxConnections = Integer.parseInt(prop.getProperty("maxConnections"));
+        for (int i = 0; i < maxConnections; i++)
+        {
+            try {
+                connections.add(JDBC_Utils.getConnection());
+            } catch (SQLException e) {
+                LOGGER.severe("Error getting connection: " + e.getMessage());
             }
         }
     }
-
-
-    public Connection getConnection() throws SQLException {
-        Connection connection =null;
-        if (!connections.isEmpty()){
-            if(!lock.isLocked()){
-                lock.lock();
-                try{
-                    if (!connections.isEmpty()){
-                        connection = connections.remove();
-                    }else{
-                        connection = JDBC_Utils.getConnection();
+    public static Connection getConnection() throws SQLException {
+        Connection connection = null;
+        if (connections.isEmpty())
+            connection = JDBC_Utils.getConnection();
+        else {
+            try {
+                if (lock.tryLock(1, TimeUnit.SECONDS))
+                {
+                    try
+                    {
+                        if (connections.isEmpty())
+                            connection = JDBC_Utils.getConnection();
+                        else
+                            connection = connections.poll();
+                    }finally {
+                        lock.unlock();
                     }
-                }finally{
-                    lock.unlock();
-                }
+                }else connection = JDBC_Utils.getConnection();
+            } catch (InterruptedException e) {
+                LOGGER.severe("Error getting lock: " + e.getMessage());
             }
-        }else{
-                connection = JDBC_Utils.getConnection();
         }
         return connection;
     }
-
-    public void close(PreparedStatement ps, Connection connection) throws SQLException {
-        if (connections.size() < maxConnections){
-            if(!lock.isLocked()){
-                lock.lock();
-                if (connections.size() < maxConnections){
-                    connections.add(connection);
-                    JDBC_Utils.close(ps);
-                }else
-                    JDBC_Utils.close(ps,connection);
-            }
-        }else
-            JDBC_Utils.close(ps,connection);
-
-    }
-
-    public void close(ResultSet rs,PreparedStatement ps, Connection connection) throws SQLException {
-        if (connections.size() < maxConnections){
-            if(!lock.isLocked()){
-                lock.lock();
-                if (connections.size() < maxConnections){
-                    connections.add(connection);
-                    JDBC_Utils.close(rs,ps);
-                }else
-                    JDBC_Utils.close(rs,ps,connection);
-            }
-        }else
-            JDBC_Utils.close(rs,ps,connection);
-
+    public static void returnConnection(Connection connection) throws SQLException {
+        if (connection!= null) {
+            if (connections.size()<maxConnections)
+                try {
+                    if (lock.tryLock(1, TimeUnit.SECONDS))
+                    {
+                        if (connections.size()<maxConnections)
+                            try {
+                                connections.add(connection);
+                            } finally {
+                                lock.unlock();
+                            }
+                        else connection.close();
+                    }
+                } catch (InterruptedException e) {
+                    LOGGER.severe("Error getting lock: " + e.getMessage());
+                }
+            else connection.close();
+        }
     }
 }
+

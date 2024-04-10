@@ -1,35 +1,33 @@
-import java.sql.*;
-import java.io.FileInputStream;
+
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.Properties;
 import java.util.logging.Logger;
+
 public class JDBC_Utils {
-    private static final Logger LOGGER = Logger.getLogger(CURD_Utils.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(JDBC_Utils.class.getName());
     private static final String userName;
-    private static final String password;
+    private static final String passWord;
     private static final String url;
-
-    private JDBC_Utils() {
-        throw new AssertionError("This class should not be instantiated.");
-    }
-
     static {
         //加载配置文件
         Properties prop = new Properties();
         InputStream input=null;
         try {
-            input = new FileInputStream("config.properties");
+            input = JDBC_Utils.class.getClassLoader().getResourceAsStream("config.properties");
             prop.load(input);
         } catch (IOException e) {
             LOGGER.severe("Error closing input stream: " + e.getMessage());
         }
 
         //获取配置
-        url=prop.getProperty("tableName");
+        url=prop.getProperty("url");
         userName=prop.getProperty("userName");
-        password=prop.getProperty("password");
-        String driver=prop.getProperty("localHost");
+        passWord=prop.getProperty("passWord");
+        String driver=prop.getProperty("driver");
 
         //加载驱动
         try {
@@ -45,36 +43,8 @@ public class JDBC_Utils {
             LOGGER.severe("Error closing input stream: " + e.getMessage());
         }
     }
-
-    //获取链接
     public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(url, userName, password);
-    }
-
-    //释放资源
-    public static void close(ResultSet rs,PreparedStatement ps, Connection connection) throws SQLException {
-        if (rs!= null)
-            rs.close();
-        if (ps!= null)
-            ps.close();
-        if (connection!= null)
-            connection.close();
-    }
-
-    public static void close(PreparedStatement ps, Connection connection) throws SQLException {
-        if (ps!= null)
-            ps.close();
-        if (connection!= null)
-            connection.close();
-    }
-    public static void close(ResultSet rs,PreparedStatement ps) throws SQLException {
-        if (rs!= null)
-            rs.close();
-        if (ps!= null)
-            ps.close();
-    }
-    public static void close(PreparedStatement ps) throws SQLException {
-        if (ps!= null)
-            ps.close();
+        return DriverManager.getConnection(url, userName, passWord);
     }
 }
+
