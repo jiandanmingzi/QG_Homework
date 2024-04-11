@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>注册页面</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#signUpButton').prop('disabled', true); // 初始时禁用注册按钮
+
+            $('#userAccount').on('input', function() {
+                checkAccount($(this).val());
+            });
+
+            $('#passWord, #confirmPass').on('input', function() {
+                checkForm();
+            });
+
+            function checkAccount(account) {
+                if (account.trim() === '') {
+                    $('#accountStatus').text('');
+                    return;
+                }
+
+                $.ajax({
+                    url: 'http://localhost:8080/TieBa/userServlet',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        method: 'checkAccount',
+                        userAccount: account
+                    }),
+                    success: function(response) {
+                        var data = JSON.parse(response);
+                        if (!data.success) {
+                            $('#accountStatus').text(data.message).css('color', 'red');
+                            $('#signUpButton').prop('disabled', true); // 账号已被注册，禁用注册按钮
+                        } else {
+                            $('#accountStatus').text('账号可用').css('color', 'green');
+                            checkForm(); // 检查表单是否可以提交
+                        }
+                    }
+                });
+            }
+
+            function checkForm() {
+                var account = $('#userAccount').val().trim();
+                var password = $('#passWord').val();
+                var confirmPass = $('#confirmPass').val();
+
+                if (account !== '' && password.length >= 6 && password.length <= 12 && password === confirmPass) {
+                    $('#signUpButton').prop('disabled', false); // 启用注册按钮
+                } else {
+                    $('#signUpButton').prop('disabled', true); // 禁用注册按钮
+                }
+            }
+
+            $('#signUpButton').click(function(e) {
+                e.preventDefault();
+                var account = $('#userAccount').val().trim();
+                var password = $('#passWord').val();
+
+                if (account.length <= 12 && password.length >= 6 && password.length <= 12) {
+                    signUp(account, password);
+                } else {
+                    alert('账号长度不能超过12位，密码长度必须在6到12位之间！');
+                }
+            });
+
+            function signUp(account, password) {
+                $.ajax({
+                    url: 'http://localhost:8080/TieBa/userServlet',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        method: 'signup',
+                        userAccount: account,
+                        passWord: password
+                    }),
+                    success: function(response) {
+                        var data = JSON.parse(response);
+                        if (data.success) {
+                            alert('注册成功!');
+                            window.location.href = 'http://localhost:8080/TieBa/login.html';
+                        } else {
+                            $('#signUpError').text(data.message).css('color', 'red');
+                        }
+                    }
+                });
+            }
+
+            $('#loginButton').click(function() {
+                window.location.href = 'http://localhost:8080/TieBa/login.html';
+            });
+        });
+    </script>
+</head>
+<body>
+<form>
+    <label for="userAccount">账号:</label>
+    <input type="text" id="userAccount" name="userAccount">
+    <span id="accountStatus"></span><br>
+    <label for="passWord">密码:</label>
+    <input type="password" id="passWord" name="passWord"><br>
+    <label for="confirmPass">确认密码:</label>
+    <input type="password" id="confirmPass" name="confirmPass"><br>
+    <input type="button" id="signUpButton" value="注册">
+    <span id="signUpError"></span><br>
+    <input type="button" id="loginButton" value="前往登陆">
+</form>
+</body>
+</html>

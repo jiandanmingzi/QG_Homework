@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登陆页面</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <label for="userAccount">账号:</label>
+    <input type="text" id="userAccount" required>
+
+
+    <label for="passWord">密码:</label>
+    <input type="password" id="passWord" required>
+
+
+    <button id="loginBtn" disabled>登陆</button>
+    <button id="registerBtn">注册</button>
+    <button id="forgotPwdBtn">忘记密码</button>
+    <div id="message" class="error"></div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        // 监听输入框的变化，以启用或禁用登录按钮
+        $('#userAccount, #passWord').on('input', function() {
+            var account = $('#userAccount').val();
+            var password = $('#passWord').val();
+            var loginBtn = $('#loginBtn');
+
+            if (account && password) {
+                loginBtn.prop('disabled', false);
+            } else {
+                loginBtn.prop('disabled', true);
+            }
+        });
+
+        // 登陆按钮点击事件
+        $('#loginBtn').click(function() {
+            var account = $('#userAccount').val();
+            var password = $('#passWord').val();
+
+            if (account.length <= 12 && password.length >= 6 && password.length <= 12) {
+                $.ajax({
+                    url: 'http://localhost:8080/TieBa/userServlet', // 改为你的登录处理URL
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        method: 'login',
+                        userAccount: account,
+                        passWord: password
+                    }),
+                    success: function(response) {
+                        if (!response.success) {
+                            $('#message').text(response.message).show();
+                        } else {
+                            // 登陆成功处理
+                            $('#message').text('登录成功！').show();
+                        }
+                    },
+                    error: function() {
+                        $('#message').text('请求失败，请检查您的网络连接。').show();
+                    }
+                });
+            } else {
+                $('#message').text('账号不超过12位，密码应在6到12位之间。').show();
+            }
+        });
+
+        // 注册和忘记密码按钮的点击事件（此处仅提供占位处理）
+        $('#registerBtn, #forgotPwdBtn').click(function() {
+            alert('该功能正在开发中...');
+        });
+    });
+</script>
+</body>
+</html>
